@@ -45,13 +45,18 @@ func Solve(number int, partOneMode string, partTwoMode string) error {
     }
 
     // Rewind if the scanner for input file 1 is the same as 2
-    partTwoScanner := inputFiles[partTwoMode].scanner
-    if partOneScanner == partTwoScanner {
-        inputFiles[partOneMode].file.Seek(0, io.SeekStart)
+    if partOneMode == partTwoMode {
+        if secondInputFile, ok := inputFiles[partTwoMode]; ok {
+            secondInputFile.file.Seek(0, io.SeekStart)
+            secondInputFile.scanner = bufio.NewScanner(secondInputFile.file)
+
+            inputFiles[partTwoMode] = secondInputFile
+        }
     } else {
         inputFiles[partOneMode].file.Close()
     }
 
+    partTwoScanner := inputFiles[partTwoMode].scanner
     partTwoSolution, partTwoErr := solvers[1](partTwoScanner)
     if partTwoErr == nil {
         fmt.Printf("Solution for part two: %s\n", partTwoSolution)
