@@ -73,13 +73,22 @@ func wordDigits(line string) (int, int) {
 
     firstDigit, lastDigit := 0, 0
 
-    // Find first digit
+    // Find a digit or word from the beginning and end
     firstWordIndex, firstWordOrDigit := math.MaxInt, "none"
+    lastWordIndex, lastWordOrDigit := math.MaxInt, "none"
+    lineRev := reverse(line)
     for _, wordOrDigit := range digitStrs {
         wordIndex := strings.Index(line, wordOrDigit)
+        revWordIndex := strings.Index(lineRev, reverse(wordOrDigit))
+
         if wordIndex < firstWordIndex && wordIndex != -1 {
             firstWordIndex = wordIndex
             firstWordOrDigit = wordOrDigit
+        }
+
+        if revWordIndex < lastWordIndex && revWordIndex != -1 {
+            lastWordIndex = revWordIndex
+            lastWordOrDigit = wordOrDigit
         }
     }
 
@@ -87,17 +96,6 @@ func wordDigits(line string) (int, int) {
         firstDigit = charToInt(firstWordOrDigit[0])
     } else {
         firstDigit = wordsToDigits[firstWordOrDigit]
-    }
-
-    // Find last digit
-    lastWordIndex, lastWordOrDigit := math.MaxInt, "none"
-    lineRev := reverse(line)
-    for _, wordOrDigit := range digitStrs {
-        wordIndex := strings.Index(lineRev, reverse(wordOrDigit))
-        if wordIndex < lastWordIndex && wordIndex != -1 {
-            lastWordIndex = wordIndex
-            lastWordOrDigit = wordOrDigit
-        }
     }
 
     if len(lastWordOrDigit) == 1 {
