@@ -25,6 +25,12 @@ func main() {
         os.Exit(1)
     }
 
+    fmt.Printf(
+        "Solving puzzle %d (part 1 in %s mode, part 2 in %s mode)\r\n\r\n",
+        *args.puzzleNum,
+        *args.partOneMode,
+        *args.partTwoMode,
+    )
     solveErr := puzzles.Solve(
         *args.puzzleNum,
         *args.partOneMode,
