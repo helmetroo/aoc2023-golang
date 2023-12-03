@@ -19,6 +19,7 @@ type Solvers [2]func(scanner *bufio.Scanner) (string, error)
 var availablePuzzles = map[int]Solvers {
     1: { P1_SolvePartOne, P1_SolvePartTwo },
     2: { P2_SolvePartOne, P2_SolvePartTwo },
+    3: { P3_SolvePartOne, P3_SolvePartTwo },
     }
 
 func Solve(number int, partOneMode string, partTwoMode string) error {
