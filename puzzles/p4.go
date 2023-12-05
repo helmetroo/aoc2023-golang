@@ -54,6 +54,11 @@ func scoreFrom(winCount int) int {
     }
 }
 
+type Card struct {
+    copies int
+    winners int
+}
+
 func P4_SolvePartOne(scanner *bufio.Scanner) (string, error) {
     score := 0
     for scanner.Scan() {
@@ -66,5 +71,27 @@ func P4_SolvePartOne(scanner *bufio.Scanner) (string, error) {
 }
 
 func P4_SolvePartTwo(scanner *bufio.Scanner) (string, error) {
-    return "", nil
+    cards := []Card{}
+
+    for scanner.Scan() {
+        line := scanner.Text()
+        winnersCount := countWinningNumbers(line)
+        cards = append(cards, Card { copies: 1, winners: winnersCount })
+    }
+
+    totalCards := 0
+    lenCards := len(cards)
+    for index, card := range cards {
+        for c := 0; c < card.copies; c++ {
+            for w := 1; w <= card.winners; w++ {
+                if index + w < lenCards {
+                    cards[index + w].copies++
+                }
+            }
+        }
+
+        totalCards += card.copies
+    }
+
+    return strconv.Itoa(totalCards), nil
 }
