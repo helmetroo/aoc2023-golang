@@ -19,3 +19,6 @@
 
 # Go workspace file
 go.work
+
+# Input files need to be supplied yourself
+input-files/
