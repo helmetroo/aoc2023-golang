@@ -15,11 +15,13 @@ type Race struct {
 func (race *Race) countWaysToWin() uint64 {
     waysToWin := uint64(0)
 
-    for heldTime := uint64(0); heldTime <= race.Time / 2; heldTime++ {
+    for heldTime := race.Time / 2; heldTime >= 0; heldTime-- {
         dist := heldTime * (race.Time - heldTime)
-        if dist > race.RecordDist {
-            waysToWin++
+        if dist <= race.RecordDist {
+            break
         }
+
+        waysToWin++
     }
 
     if race.Time % 2 == 0 {
