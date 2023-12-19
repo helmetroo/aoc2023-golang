@@ -61,6 +61,72 @@ func walkNetwork(network *Network, sequence *string) int {
     return steps
 }
 
+func walkNetworkSimul(network *Network, sequence *string) uint64 {
+    startNodes := []string{}
+    for node := range *network {
+        if endWith(&node, 'A') {
+            startNodes = append(startNodes, node)
+        }
+    }
+
+    // At least I figured out I needed to consider the number of steps to Z
+    // from each start node and use them together (product seemed reasonable from seeing a pattern in the test input for part 2)
+    // Logical leap to take their LCM was thanks to reddit
+    steps := []uint64{}
+    for _, node := range startNodes {
+        steps = append(steps, stepsToZ(network, sequence, &node))
+    }
+
+    return lcm(&steps)
+}
+
+func stepsToZ(network *Network, sequence *string, startNode *string) uint64 {
+    steps := uint64(0)
+    sequenceIdx, sequenceLen := 0, len(*sequence)
+
+    curNode := *startNode
+    for !endWith(&curNode, 'Z') {
+        adjs := (*network)[curNode]
+        dir := (*sequence)[sequenceIdx]
+        if dir == 'L' {
+            curNode = adjs.Left
+        } else {
+            curNode = adjs.Right
+        }
+
+        sequenceIdx = (sequenceIdx + 1) % sequenceLen
+        steps++
+    }
+
+    return steps
+}
+
+func lcm(arr *[]uint64) uint64 {
+    size := len(*arr)
+    curLcm := (*arr)[0]
+    idx := 1
+
+    for idx < size {
+        a, b := curLcm, (*arr)[idx]
+        curLcm = (a * b) / gcd(a, b)
+        idx++
+    }
+
+    return curLcm
+}
+
+func gcd(a, b uint64) uint64 {
+    if b == 0 {
+        return a
+    }
+
+    return gcd(b, a % b)
+}
+
+func endWith(name *string, suffix byte) bool {
+    return (*name)[2] == suffix
+}
+
 func P8_SolvePartOne(scanner *bufio.Scanner) (string, error) {
     network, sequence, _ := parseNetwork(scanner)
     steps := walkNetwork(&network, &sequence)
@@ -68,5 +134,7 @@ func P8_SolvePartOne(scanner *bufio.Scanner) (string, error) {
 }
 
 func P8_SolvePartTwo(scanner *bufio.Scanner) (string, error) {
-    return "", nil
+    network, sequence, _ := parseNetwork(scanner)
+    steps := walkNetworkSimul(&network, &sequence)
+    return strconv.FormatUint(steps, 10), nil
 }
