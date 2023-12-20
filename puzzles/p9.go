@@ -85,6 +85,37 @@ func extrapolateValuesFromHistories(histories *Histories) int {
     return sumExtrapolatedValues
 }
 
+func extrapolateValuesFromHistoriesAtBeginning(histories *Histories) int {
+    sumExtrapolatedValues := 0
+
+    for _, historyDiffs := range *histories {
+        depth := len(historyDiffs) - 1
+
+        for curDepth := depth; curDepth >= 0; curDepth-- {
+            // Must reference the array we append to (in this case, curSeq)
+            curSeq := &historyDiffs[curDepth]
+            lastValCurSeq := (*curSeq)[0]
+
+            if curDepth != depth {
+                // Above bottom sequence
+                belowSeq := historyDiffs[curDepth + 1]
+                lastValBelowSeq := belowSeq[0]
+                diff := lastValCurSeq - lastValBelowSeq
+
+                *curSeq = append([]int{ diff }, *curSeq...)
+                if curDepth == 0 {
+                    sumExtrapolatedValues += diff
+                }
+            } else {
+                // At the bottom sequence, lastValBelowSeq = 0
+                *curSeq = append([]int{ lastValCurSeq }, *curSeq...)
+            }
+        }
+    }
+
+    return sumExtrapolatedValues
+}
+
 func P9_SolvePartOne(scanner *bufio.Scanner) (string, error) {
     histories := buildHistories(scanner)
     sumExtrapolatedValues := extrapolateValuesFromHistories(&histories)
@@ -93,5 +124,8 @@ func P9_SolvePartOne(scanner *bufio.Scanner) (string, error) {
 }
 
 func P9_SolvePartTwo(scanner *bufio.Scanner) (string, error) {
-    return "", nil
+    histories := buildHistories(scanner)
+    sumExtrapolatedValues := extrapolateValuesFromHistoriesAtBeginning(&histories)
+
+    return strconv.Itoa(sumExtrapolatedValues), nil
 }
