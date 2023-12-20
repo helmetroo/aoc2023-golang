@@ -25,6 +25,7 @@ var availablePuzzles = map[int]Solvers {
     6: { P6_SolvePartOne, P6_SolvePartTwo },
     7: { P7_SolvePartOne, P7_SolvePartTwo },
     8: { P8_SolvePartOne, P8_SolvePartTwo },
+    9: { P9_SolvePartOne, P9_SolvePartTwo },
     }
 
 func Solve(number int, partOneMode string, partTwoMode string) error {
