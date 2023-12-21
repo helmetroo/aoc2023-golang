@@ -2,17 +2,17 @@ package puzzles
 
 import (
 	"bufio"
-	"regexp"
 	"strconv"
+
+    "samjay/aoc2023-golang/utils"
 )
 
-var NUMBER_REGEX = regexp.MustCompile(`(\d+)`)
 
 func findAndSumSymAdjNums(grid *[]string) int {
     adjNumSum := 0
     rows, cols := len(*grid), len((*grid)[0])
     for row, rowLine := range *grid {
-        numMatches := NUMBER_REGEX.FindAllStringIndex(rowLine, -1)
+        numMatches := utils.NUMBER_REGEX.FindAllStringIndex(rowLine, -1)
         for _, numIndices := range numMatches {
             firstDigitCol, lastDigitCol := numIndices[0], numIndices[1] - 1
             firstDigitAdj := digitAdjacentToSym(grid, FIRST, row, firstDigitCol, rows, cols)
@@ -68,7 +68,7 @@ func digitAdjacentToSym(grid *[]string, d DigitPos, row, col, rows, cols int) bo
     for _, offset := range offsets {
         offsetRow, offsetCol := offset[0], offset[1]
         targetRow, targetCol := row + offsetRow, col + offsetCol
-        if !validOffset(targetRow, targetCol, rows, cols) {
+        if !utils.ValidOffset(targetRow, targetCol, rows, cols) {
             continue
         }
 
@@ -79,13 +79,6 @@ func digitAdjacentToSym(grid *[]string, d DigitPos, row, col, rows, cols int) bo
     }
 
     return false
-}
-
-func validOffset(targetRow, targetCol, rows, cols int) bool {
-    return targetRow >= 0 &&
-        targetRow <= rows - 1 &&
-        targetCol >= 0 &&
-        targetCol <= cols - 1
 }
 
 func P3_SolvePartOne(scanner *bufio.Scanner) (string, error) {

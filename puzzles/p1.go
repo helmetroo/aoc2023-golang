@@ -5,11 +5,9 @@ import (
 	"math"
 	"strconv"
 	"strings"
-)
 
-func charToInt(char byte) int {
-    return int(char) - '0'
-}
+    "samjay/aoc2023-golang/utils"
+)
 
 // A means to keep track of where each digit is
 func digits(line []byte) (int, int) {
@@ -17,7 +15,7 @@ func digits(line []byte) (int, int) {
     digits := make(map[int]int)
 
     for _, char := range line {
-        asInt := charToInt(char)
+        asInt := utils.CharToInt(char)
         if asInt >= 0 && asInt <= 9 {
             digits[digitIndex] = asInt
             digitIndex++
@@ -25,16 +23,6 @@ func digits(line []byte) (int, int) {
     }
 
     return digits[0], digits[digitIndex - 1]
-}
-
-// In-place string reverse
-// https://stackoverflow.com/a/10030772
-func reverse(s string) string {
-    runes := []rune(s)
-    for i, j := 0, len(runes) - 1; i < j; i, j = i + 1, j - 1 {
-        runes[i], runes[j] = runes[j], runes[i]
-    }
-    return string(runes)
 }
 
 func wordDigits(line string) (int, int) {
@@ -76,10 +64,10 @@ func wordDigits(line string) (int, int) {
     // Find a digit or word from the beginning and end
     firstWordIndex, firstWordOrDigit := math.MaxInt, "none"
     lastWordIndex, lastWordOrDigit := math.MaxInt, "none"
-    lineRev := reverse(line)
+    lineRev := utils.ReverseString(line)
     for _, wordOrDigit := range digitStrs {
         wordIndex := strings.Index(line, wordOrDigit)
-        revWordIndex := strings.Index(lineRev, reverse(wordOrDigit))
+        revWordIndex := strings.Index(lineRev, utils.ReverseString(wordOrDigit))
 
         if wordIndex < firstWordIndex && wordIndex != -1 {
             firstWordIndex = wordIndex
@@ -93,13 +81,13 @@ func wordDigits(line string) (int, int) {
     }
 
     if len(firstWordOrDigit) == 1 {
-        firstDigit = charToInt(firstWordOrDigit[0])
+        firstDigit = utils.CharToInt(firstWordOrDigit[0])
     } else {
         firstDigit = wordsToDigits[firstWordOrDigit]
     }
 
     if len(lastWordOrDigit) == 1 {
-        lastDigit = charToInt(lastWordOrDigit[0])
+        lastDigit = utils.CharToInt(lastWordOrDigit[0])
     } else {
         lastDigit = wordsToDigits[lastWordOrDigit]
     }

@@ -2,11 +2,10 @@ package puzzles
 
 import (
 	"bufio"
-	"regexp"
 	"strconv"
-)
 
-var NUMBER_WITH_NEG_REGEX = regexp.MustCompile(`-?\d+`)
+    "samjay/aoc2023-golang/utils"
+)
 
 type Histories [][][]int
 func buildHistories(scanner *bufio.Scanner) Histories {
@@ -15,7 +14,7 @@ func buildHistories(scanner *bufio.Scanner) Histories {
     for scanner.Scan() {
         curHistoryDiffs := [][]int{}
         curLine := scanner.Text()
-        lineNumStrs := NUMBER_WITH_NEG_REGEX.FindAllString(curLine, -1)
+        lineNumStrs := utils.NUMBER_WITH_NEG_REGEX.FindAllString(curLine, -1)
 
         // Parse each first
         lineNums := []int{}

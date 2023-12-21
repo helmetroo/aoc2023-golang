@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"regexp"
 	"strconv"
+
+    "samjay/aoc2023-golang/utils"
 )
 
 // [0] = node; [1] = node's left; [2] = node's right
@@ -77,7 +79,7 @@ func walkNetworkSimul(network *Network, sequence *string) uint64 {
         steps = append(steps, stepsToZ(network, sequence, &node))
     }
 
-    return lcm(&steps)
+    return utils.Lcm(&steps)
 }
 
 func stepsToZ(network *Network, sequence *string, startNode *string) uint64 {
@@ -99,28 +101,6 @@ func stepsToZ(network *Network, sequence *string, startNode *string) uint64 {
     }
 
     return steps
-}
-
-func lcm(arr *[]uint64) uint64 {
-    size := len(*arr)
-    curLcm := (*arr)[0]
-    idx := 1
-
-    for idx < size {
-        a, b := curLcm, (*arr)[idx]
-        curLcm = (a * b) / gcd(a, b)
-        idx++
-    }
-
-    return curLcm
-}
-
-func gcd(a, b uint64) uint64 {
-    if b == 0 {
-        return a
-    }
-
-    return gcd(b, a % b)
 }
 
 func endWith(name *string, suffix byte) bool {

@@ -4,45 +4,16 @@ import (
 	"bufio"
 	"strconv"
 	"strings"
+
+    "samjay/aoc2023-golang/utils"
 )
 
 func countWinningNumbers(line string) int {
     colonIdx := strings.Index(line, ":")
     winnersAndHadNumbers := strings.Split(line[colonIdx + 2:], "|")
     winners, hads := winnersAndHadNumbers[0], winnersAndHadNumbers[1]
-    winnerSet, hadSet := toNumSet(winners), toNumSet(hads)
-    return len(intersect(&winnerSet, &hadSet))
-}
-
-func toNumSet(nums string) map[int]struct{} {
-    numSet := map[int]struct{}{}
-
-    // NUMBER_REGEX declared and compiled already in P2
-    numIndices := NUMBER_REGEX.FindAllStringIndex(nums, -1)
-    for _, indices := range numIndices {
-        firstDigit, lastDigit := indices[0], indices[1]
-        num, _ := strconv.Atoi(nums[firstDigit:lastDigit])
-        numSet[num] = struct{}{}
-    }
-
-    return numSet
-}
-
-func intersect(first *map[int]struct{}, second *map[int]struct{}) map[int]struct{} {
-    intersection := map[int]struct{}{}
-
-    // Iterate over the smaller one (the result set won't be any bigger than it!)
-    if len(*first) > len(*second) {
-        first, second = second, first
-    }
-
-    for num := range *first {
-        if _, exists := (*second)[num]; exists {
-            intersection[num] = struct{}{}
-        }
-    }
-
-    return intersection
+    winnerSet, hadSet := utils.ToNumSet(winners), utils.ToNumSet(hads)
+    return len(utils.Intersect(&winnerSet, &hadSet))
 }
 
 func scoreFrom(winCount int) int {

@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"strconv"
     "strings"
+
+    "samjay/aoc2023-golang/utils"
 )
 
 type Race struct {
@@ -38,7 +40,7 @@ func parseRaces(scanner *bufio.Scanner) ([]Race, error) {
 
     for scanner.Scan() {
         currentLine := scanner.Text()
-        numsInLine := NUMBER_REGEX.FindAllString(currentLine, -1)
+        numsInLine := utils.NUMBER_REGEX.FindAllString(currentLine, -1)
 
         if lineNum == 0 {
             times = numsInLine
@@ -66,7 +68,7 @@ func parseSmooshedRace(scanner *bufio.Scanner) (Race, error) {
 
     for scanner.Scan() {
         currentLine := scanner.Text()
-        numsInLine := strings.Join(NUMBER_REGEX.FindAllString(currentLine, -1), "")
+        numsInLine := strings.Join(utils.NUMBER_REGEX.FindAllString(currentLine, -1), "")
         numInLine, _ := strconv.ParseUint(numsInLine, 10, 64)
 
         if lineNum == 0 {
